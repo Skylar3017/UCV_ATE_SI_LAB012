@@ -2,27 +2,18 @@ name: Python CI
 
 on:
   push:
-    branches:
-      - develop
-      - main
-      - feature/**
+    branches: ["main", "develop"]
   pull_request:
-    branches:
-      - develop
-      - main
+    branches: ["main", "develop"]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -33,7 +24,7 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          python -m pytest --cov=src --cov-report=xml --cov-report=term-missing
+          pytest --cov=src --cov-report=xml --cov-report=term-missing
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5
